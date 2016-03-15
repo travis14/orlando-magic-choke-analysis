@@ -7,6 +7,9 @@ from random import randint
 import collections
 from collections import namedtuple
 
+import numpy as np
+import pandas as pd
+
 playByPlayBaseURL = "http://espn.go.com/nba/playbyplay?gameId="
 
 GamePlayInfo = collections.namedtuple("GamePlayInfo", ["HomeTeam", "AwayTeam", "SecondsLeft", "PlayDelta", "FinalDelta"])
@@ -63,8 +66,22 @@ def getMaxFourthQuarterLeads(gameID):
 #print getPlayFromGameID(400828836)
 #print getMaxFourthQuarterLeads(400828836)
 leadInfos = []
+chokeDataframe = pd.DataFrame()
+count = 0
 for i in range(400827890, 400828836 + 1):
-	leadInfo = getMaxFourthQuarterLeads(i)
-	leadInfos.append(leadInfo)
-	print leadInfo
+	if i == 400828541 or i == 400828543 or 400828681:
+		pass
+	else:
+		leadInfo = getMaxFourthQuarterLeads(i)
+		leadInfos.append(leadInfo)
+		# print i	
+		# print leadInfos
+
+chokeDataframe = chokeDataframe.append(leadInfos)
+chokeDataframe.columns = ["HomeTeam", "AwayTeam", "HomeMax4thLead", "RoadMax4thLead", "HomeWinMargin"]
+
+chokeDataframe.to_csv("chokeDataframe5.csv")
+
+
+
 #first game of the season is ID=400827890, most recent one as of 3/9 is ID=400828836
